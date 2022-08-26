@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<form id="loginForm">
+    <input type="email" name="email" placeholder="email" >
+    <input type="password" name="password" placeholder="password" >
+    <button>Login</button>
+</form>
+
+<script src="node_modules/js-cookie/dist/js.cookie.min.js"></script>
+<script>
+
+
+    let host = "http://127.0.0.1:8000/";
+    let loginUrl = host+"api/v1/login";
+    let loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit',function (e){
+        e.preventDefault();
+        let formData = new FormData(this);
+        console.log(formData.get('email'),formData.get('password'));
+
+        fetch(loginUrl,{
+            method:"POST",
+            body:formData
+        })
+            .then(res => res.json())
+            .then(json => {
+                if(json.hasOwnProperty('token')){
+                    Cookies.set('token',json.token)
+                    console.log(json)
+                    location.href = "home.html"
+
+                }else{
+                    console.log(json)
+                }
+
+            })
+
+    })
+
+
+
+
+</script>
+</body>
+</html>
